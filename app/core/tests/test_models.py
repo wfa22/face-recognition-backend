@@ -65,13 +65,13 @@ class ModelTests(TestCase):
     def test_create_connection_successful(self):
         """Test creating a connection is successful."""
         user = create_user()
-        Mac = '00:0a:95:9d:68:16'
+        mac = '00:0a:95:9d:68:16'
         connection_time = timezone.now()
         connection = models.Connections.objects.create(
             user=user,
-            Mac=Mac,
+            mac=mac,
             connection_time=connection_time,
         )
         self.assertEqual(connection.user, user)
-        self.assertEqual(connection.Mac, Mac)
+        self.assertEqual(connection.mac, mac)
         self.assertEqual(connection.connection_time, connection_time)

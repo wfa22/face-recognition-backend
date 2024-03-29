@@ -41,6 +41,7 @@ class UserManager(BaseUserManager):
         """Create and return new superuser."""
         user = self.create_user(email, password)
         user.is_superuser = True
+        user.is_staff = True
         user.save(using=self._db)
 
         return user
@@ -58,6 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
+    is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -79,5 +81,5 @@ class Subscription(models.Model):
 class Connections(models.Model):
     """User's connections object."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Mac = models.CharField(max_length=50)
+    mac = models.CharField(max_length=50)
     connection_time = models.DateTimeField()
