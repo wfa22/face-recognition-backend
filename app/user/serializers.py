@@ -12,8 +12,13 @@ from rest_framework import serializers
 
 from core.models import Country
 
+
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
+    country = serializers.PrimaryKeyRelatedField(
+        queryset=Country.objects.all(),
+        required=False,
+    )
 
     class Meta:
         model = get_user_model()

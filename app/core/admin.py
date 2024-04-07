@@ -14,7 +14,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ['email', 'name']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal Info'), {'fields': ('name','country')}),
+        (_('Personal Info'), {'fields': ('name', 'country')}),
         (
             _('Permissions'),
             {
@@ -43,6 +43,7 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
+
 class SubscriptionAdmin(admin.ModelAdmin):
     """Define the admin pages for Subscriptions."""
     ordering = ['user_id']
@@ -57,7 +58,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     """Define the admin pages for Countries."""
     ordering = ['id']
-    list_display = ['name','id']
+    list_display = ['name', 'id']
     fieldsets = (
         (None, {'fields': ('name',)}),
     )
@@ -67,7 +68,7 @@ class ConnectionsAdmin(admin.ModelAdmin):
     """Define the admin pages for Connections."""
     ordering = ['connection_time']
     list_display = ['user', 'mac', 'connection_time']
-    readonly_fields = ['user','connection_time','mac']
+    readonly_fields = ['user', 'connection_time', 'mac']
     fieldsets = (
         (None, {'fields': ('user', 'mac')}),
         (_('Connection Details'), {'fields': ('connection_time',)}),
