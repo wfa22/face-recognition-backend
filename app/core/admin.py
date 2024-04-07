@@ -14,7 +14,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ['email', 'name']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal Info'), {'fields': ('name',)}),
+        (_('Personal Info'), {'fields': ('name','country')}),
         (
             _('Permissions'),
             {
@@ -57,7 +57,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     """Define the admin pages for Countries."""
     ordering = ['id']
-    list_display = ['name']
+    list_display = ['name','id']
     fieldsets = (
         (None, {'fields': ('name',)}),
     )
