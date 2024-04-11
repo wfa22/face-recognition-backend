@@ -1,6 +1,7 @@
 """
 Database models.
 """
+from django.contrib.admin import ModelAdmin # noqa
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -10,6 +11,7 @@ from django.contrib.auth.models import (
 from datetime import datetime
 from django.utils import timezone
 import secrets
+from allauth.socialaccount.models import SocialApp # noqa
 
 
 class UserManager(BaseUserManager):
@@ -55,6 +57,7 @@ class Country(models.Model):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system."""
+    username = None
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -83,3 +86,10 @@ class Connections(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     mac = models.CharField(max_length=50)
     connection_time = models.DateTimeField()
+
+
+"""class SocialAppAdmin(ModelAdmin):
+    model = SocialApp
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('name', 'provider')"""
