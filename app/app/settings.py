@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'user',
-    # Хуйня для гугла
     'social.apps.django_app.default',
     'django.contrib.sites',
     'allauth',
@@ -59,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # еще для гугла
+    'allauth.account.middleware.AccountMiddleware',
 
 ]
 
@@ -141,7 +140,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# Еще хуйня для гугла
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
@@ -151,7 +149,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         }
-    }
+    },
+    # Add configurations for other providers like Facebook, Twitter, etc.
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -166,4 +165,5 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_ADAPTER = 'core.socialaccount_adapter.CustomSocialAccountAdapter'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

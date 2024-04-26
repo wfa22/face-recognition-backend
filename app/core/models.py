@@ -1,7 +1,7 @@
 """
 Database models.
 """
-from django.contrib.admin import ModelAdmin # noqa
+from django.contrib.admin import ModelAdmin  # noqa
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -11,7 +11,9 @@ from django.contrib.auth.models import (
 from datetime import datetime
 from django.utils import timezone
 import secrets
-from allauth.socialaccount.models import SocialApp # noqa
+from allauth.socialaccount.models import SocialAccount
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class UserManager(BaseUserManager):
@@ -61,7 +63,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
+    country = models.ForeignKey(
+        Country,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
@@ -88,8 +95,23 @@ class Connections(models.Model):
     connection_time = models.DateTimeField()
 
 
-"""class SocialAppAdmin(ModelAdmin):
-    model = SocialApp
-    add_to_settings_menu = False
-    exclude_from_explorer = False
-    list_display = ('name', 'provider')"""
+@receiver(post_save, sender=SocialAccount)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        data = instance.extra_data
+        user = instance.user
+        name = data['name']
+        user.name = name
+
+        while True:
+            app_key = secrets.token_hex(10)
+            if not Subscription.objects.filter(app_key=app_key).exists():
+                break
+
+        Subscription.objects.create(
+            user=user,
+            subscription_plan='Free',
+            valid_until=timezone.make_aware(datetime.max),
+            app_key=app_key,
+        )
+        user.save()
