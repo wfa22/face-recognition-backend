@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'user',
+    'subscriptions',
     'social.apps.django_app.default',
     'django.contrib.sites',
     'allauth',

@@ -30,6 +30,7 @@ urlpatterns = [
         name='api-docs',
     ),
     path('api/user/', include('user.urls')),
+    path('api/subscriptions/', include('subscriptions.urls')),
     path('accounts/', include('allauth.urls')),
     path('social-auth/', include(
         'social.apps.django_app.urls',
