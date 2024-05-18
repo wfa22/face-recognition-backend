@@ -115,3 +115,11 @@ def create_profile(sender, instance, created, **kwargs):
             app_key=app_key,
         )
         user.save()
+
+
+class Feedback(models.Model):
+    """Feedback model."""
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    issue = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

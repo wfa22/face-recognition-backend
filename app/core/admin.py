@@ -75,6 +75,19 @@ class ConnectionsAdmin(admin.ModelAdmin):
     )
 
 
+class FeedbackAdmin(admin.ModelAdmin):
+    """Define the admin pages for Feedback."""
+    ordering = ['-created_at']
+    list_display = ['name', 'email', 'created_at']
+    readonly_fields = ['created_at']
+    fieldsets = (
+        (None, {'fields': ('name', 'email')}),
+        (_('Issue'), {'fields': ('issue',)}),
+        (_('Creation Date'), {'fields': ('created_at',)}),
+    )
+
+
+admin.site.register(models.Feedback, FeedbackAdmin)
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Subscription, SubscriptionAdmin)
 admin.site.register(models.Country, CountryAdmin)

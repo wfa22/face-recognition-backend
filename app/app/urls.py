@@ -35,5 +35,5 @@ urlpatterns = [
     path('social-auth/', include(
         'social.apps.django_app.urls',
         namespace='social')),
-
+    path('api/feedback/', include('feedback.urls'))
 ]
