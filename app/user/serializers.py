@@ -7,6 +7,7 @@ from django.contrib.auth import (
 )
 from django.db.migrations import serializer  # noqa
 from django.utils.translation import gettext as _
+from rest_framework.exceptions import ValidationError
 
 from rest_framework import serializers
 
@@ -73,5 +74,36 @@ class GoogleUserSerializer(serializers.ModelSerializer):
         fields = ['email', 'name']
 
     def create(self, validated_data):
-        """Create and return a user with encrypted password."""
+        """Create and return a user."""
+        email = validated_data.get('email')
+
+        # Check if the user with the given email already exists
+        if get_user_model().objects.filter(email=email).exists():
+            raise ValidationError('User with this email already exists.')
+
         return get_user_model().objects.create_user(**validated_data)
+
+
+class GoogleAuthTokenSerializer(serializers.Serializer):
+    """Serializer for the user auth token."""
+    email = serializers.EmailField()
+    name = serializers.CharField()
+
+    def validate(self, attrs):
+        """Validate and authenticate the user."""
+        email = attrs.get('email')
+        name = attrs.get('name')
+        User = get_user_model()
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            msg = _('Unable to authenticate with provided credentials')
+            raise serializers.ValidationError(msg, code='authorization')
+
+        if user.name != name:
+            msg = _('Unable to authenticate with provided credentials')
+            raise serializers.ValidationError(msg, code='authorization')
+
+        attrs['user'] = user
+        return attrs

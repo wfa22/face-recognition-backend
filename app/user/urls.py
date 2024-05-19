@@ -15,4 +15,7 @@ urlpatterns = [
          views.CreateGoogleUserView.as_view(),
          name='googlecreate'
          ),
+    path('googletoken/',
+         views.CreateGoogleTokenView.as_view(),
+         name='googletoken')
 ]
