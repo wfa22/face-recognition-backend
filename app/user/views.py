@@ -6,7 +6,9 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 
 from core.models import User
-from user.serializers import UserSerializer, AuthTokenSerializer
+from user.serializers import (UserSerializer,
+                              AuthTokenSerializer,
+                              GoogleUserSerializer)
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -33,3 +35,8 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     def get_queryset(self):
         """Return a queryset"""
         return User.objects.all()
+
+
+class CreateGoogleUserView(generics.CreateAPIView):
+    """Create a new user in the system."""
+    serializer_class = GoogleUserSerializer

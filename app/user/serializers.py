@@ -63,3 +63,15 @@ class AuthTokenSerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code='authorization')
         attrs['user'] = user
         return attrs
+
+
+class GoogleUserSerializer(serializers.ModelSerializer):
+    """Serializer for the google user object."""
+
+    class Meta:
+        model = get_user_model()
+        fields = ['email', 'name']
+
+    def create(self, validated_data):
+        """Create and return a user with encrypted password."""
+        return get_user_model().objects.create_user(**validated_data)
