@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_spectacular',
@@ -61,8 +62,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'Access-Control-Allow-Headers',
+    'Access-Control-Allow-Credentials',
+    'Access-Control-Allow-Origin',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+)
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+]
+CORS_ALLOW_CREDENTIALS=True
 
 ROOT_URLCONF = 'app.urls'
 
