@@ -70,6 +70,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
     )
     is_staff = models.BooleanField(default=False)
+    picture = models.ImageField(upload_to='profile_pictures/',
+                                blank=True,
+                                null=True)
 
     objects = UserManager()
 

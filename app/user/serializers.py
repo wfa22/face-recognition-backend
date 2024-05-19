@@ -20,10 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
         queryset=Country.objects.all(),
         required=False,
     )
+    picture = serializers.ImageField(required=False)
 
     class Meta:
         model = get_user_model()
-        fields = ['email', 'password', 'name', 'country']
+        fields = ['email', 'password', 'name', 'country', 'picture']
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
@@ -69,9 +70,11 @@ class AuthTokenSerializer(serializers.Serializer):
 class GoogleUserSerializer(serializers.ModelSerializer):
     """Serializer for the google user object."""
 
+    picture = serializers.ImageField(required=False)
+
     class Meta:
         model = get_user_model()
-        fields = ['email', 'name']
+        fields = ['email', 'name', 'picture']
 
     def create(self, validated_data):
         """Create and return a user."""
