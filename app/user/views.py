@@ -59,8 +59,24 @@ class CreateGoogleUserView(generics.CreateAPIView):
                 {'message': 'User with this email already exists.'},
                 status=status.HTTP_200_OK)
 
+        # Add picture_url to request data
+        request_data = request.data.copy()
+        picture_url = request_data.pop('picture_url', None)
+        if picture_url:
+            request_data['picture_url'] = picture_url
+
         # If the user does not exist, proceed with the normal create flow
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        return Response(serializer.data,
+                        status=status.HTTP_201_CREATED,
+                        headers=headers)
+
+        # If the user does not exist, proceed with the normal create flow
+        # return super().create(request, *args, **kwargs)
 
 
 class CreateGoogleTokenView(ObtainAuthToken):

@@ -8,6 +8,8 @@ from django.contrib.auth import (
 from django.db.migrations import serializer  # noqa
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from rest_framework import serializers
 
@@ -71,10 +73,20 @@ class GoogleUserSerializer(serializers.ModelSerializer):
     """Serializer for the google user object."""
 
     picture = serializers.ImageField(required=False)
+    picture_url = serializers.URLField(write_only=True, required=False)
 
     class Meta:
         model = get_user_model()
-        fields = ['email', 'name', 'picture']
+        fields = ['email', 'name', 'picture', 'picture_url']
+
+    def validate_picture_url(self, value):
+        """Validate the picture URL."""
+        validator = URLValidator()
+        try:
+            validator(value)
+        except DjangoValidationError:
+            raise serializers.ValidationError("Enter a valid URL.")
+        return value
 
     def create(self, validated_data):
         """Create and return a user."""
@@ -83,8 +95,24 @@ class GoogleUserSerializer(serializers.ModelSerializer):
         # Check if the user with the given email already exists
         if get_user_model().objects.filter(email=email).exists():
             raise ValidationError('User with this email already exists.')
+        user = get_user_model().objects.create_user(**validated_data)
 
-        return get_user_model().objects.create_user(**validated_data)
+        picture_url = validated_data.pop('picture_url', None)
+        if picture_url:
+            user.picture.save(*self.download_image(picture_url))
+
+        return user
+
+    def download_image(self, url):
+        import requests
+        from django.core.files.base import ContentFile
+        response = requests.get(url)
+        if response.status_code == 200:
+            file_name = url.split('/')[-1].split('?')[0]
+            if not file_name.endswith('.png'):
+                file_name += '.png'
+            return file_name, ContentFile(response.content)
+        return None, None
 
 
 class GoogleAuthTokenSerializer(serializers.Serializer):
