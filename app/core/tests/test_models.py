@@ -4,7 +4,6 @@ Tests for models.
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from datetime import datetime
 
 from core import models
 
@@ -56,10 +55,6 @@ class ModelTests(TestCase):
         user = create_user()
         subscription = models.Subscription.objects.get(user=user)
         self.assertEqual(subscription.subscription_plan, 'Free')
-        self.assertEqual(
-            subscription.valid_until,
-            timezone.make_aware(datetime.max)
-        )
         self.assertIsNotNone(subscription.app_key)
 
     def test_create_connection_successful(self):

@@ -56,7 +56,7 @@ class PrivateSubscriptionApiTest(TestCase):
 
     def test_update_subscription_success(self):
         """Test updating the subscription for the authenticated user."""
-        payload = {'subscription_plan': 'Standard',
+        payload = {'subscription_plan': 'Paid',
                    'valid_until': '2024-05-17T17:01:02.206Z',
                    }
         res = self.client.put(MANAGE_SUBSCRIPTION_URL, payload)

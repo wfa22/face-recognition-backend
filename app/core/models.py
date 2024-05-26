@@ -8,7 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.utils import timezone
 import secrets
 from allauth.socialaccount.models import SocialAccount
@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
         Subscription.objects.create(
             user=user,
             subscription_plan='Free',
-            valid_until=timezone.make_aware(datetime.max),
+            valid_until=timezone.now() + timedelta(weeks=1),
             app_key=app_key,
         )
 
@@ -82,14 +82,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Subscription(models.Model):
     """Subscription object."""
+    PLAN_CHOICES = [
+        ('Free', 'Free'),
+        ('Paid', 'Paid'),
+        ('Expired', 'Expired'),
+    ]
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True
     )
-    subscription_plan = models.CharField(max_length=100)
+    subscription_plan = models.CharField(max_length=20, choices=PLAN_CHOICES)
     valid_until = models.DateTimeField()
     app_key = models.CharField(max_length=50, null=True)
+
+    def is_expired(self):
+        return self.valid_until < timezone.now()
 
 
 class Connections(models.Model):

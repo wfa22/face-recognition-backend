@@ -8,3 +8,4 @@ social-auth-app-django==5.4.0
 django-cors-headers==4.1.0
 pillow==10.3.0
 drf-yasg==1.21.7
+schedule==1.2.2
