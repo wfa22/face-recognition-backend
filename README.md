@@ -47,14 +47,26 @@ To run the tests, use the following command:
 docker-compose run --rm app sh -c "python manage.py test"
 ```
 
-Documentation
+### Documentation
+This is our [API Documentation](./API-Documentation.md)
+
 For more information on development, refer to the following documentation:
 
 [Python Documentation](https://docs.python.org/3/)
 
 [Django Documentation](https://docs.djangoproject.com/en/stable/)
 
-Contribution
+
+## Related Repositories
+Here you can visit repositories related to our project
+
+[Frontend Repository](https://github.com/sadnesssssssss/face-recognition-fe)
+
+[ML Repository](https://github.com/wh1t3tea/face-recognition)
+
+
+### Contribution
 This project is developed for educational purposes and can be further refined and expanded for specific needs.
 When using this code in your projects, please provide references to the original research papers and datasets.
+
 
